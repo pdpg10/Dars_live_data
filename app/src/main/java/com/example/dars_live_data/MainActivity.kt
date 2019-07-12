@@ -1,28 +1,42 @@
 package com.example.dars_live_data
 
+import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity() {
+//todo mutableLivedata vs livedata
 
-    private var c = 0
-    private val liveData by lazy { MutableLiveData<String>() }
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+
+        val myViewModel = ViewModelProviders.of(this)
+            .get(MyViewModel::class.java)
+
+
+        val liveData = myViewModel.onStartTask()
+        Log.d("MainActivity", "oncreate hashCode:${myViewModel.hashCode()}")
         liveData.observe(this, Observer { tv.text = it })
+    }
 
+    companion object {
+        private var factory: ViewModelProvider.AndroidViewModelFactory? = null
+        fun factory(app: Application): ViewModelProvider.AndroidViewModelFactory {
+            if (factory == null) {
+                factory = ViewModelProvider.AndroidViewModelFactory.getInstance(app)
+            }
+            return factory!!
 
-        fab.setOnClickListener {
-            liveData.value = "News-${c++}"//from ui thread
-//            liveData.postValue("News-${c++}")//non ui thread
         }
     }
 }
