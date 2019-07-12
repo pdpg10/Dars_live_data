@@ -6,14 +6,12 @@ import androidx.lifecycle.ViewModel
 
 class MyViewModel : ViewModel() {
     private val liveData: MutableLiveData<String> = MutableLiveData()
-    private val task = Task(liveData)
-    private var isStarted = false
 
-    fun onStartTask(): LiveData<String> {
-        if (!isStarted) {
-            task.start()
-            isStarted = true
-        }
-        return liveData
+    fun updateText(text: String) {
+        liveData.value = text
     }
+
+    fun getLiveData(): LiveData<String> = liveData
+
+
 }
