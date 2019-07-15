@@ -28,15 +28,4 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "oncreate hashCode:${myViewModel.hashCode()}")
         liveData.observe(this, Observer { tv.text = it })
     }
-
-    companion object {
-        private var factory: ViewModelProvider.AndroidViewModelFactory? = null
-        fun factory(app: Application): ViewModelProvider.AndroidViewModelFactory {
-            if (factory == null) {
-                factory = ViewModelProvider.AndroidViewModelFactory.getInstance(app)
-            }
-            return factory!!
-
-        }
-    }
 }
